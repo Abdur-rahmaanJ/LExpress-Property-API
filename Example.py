@@ -1,5 +1,5 @@
-import LExpressProperty
+from LExpressProperty import Agent
 
-ENGINE = LExpressProperty.Engine()
-DATA = ENGINE.collect(payment = "Buy", property_type = "House", sort_by = "Least Expensive", pages = 10)
-print(DATA)
+AGENT = Agent()
+DATA = AGENT.collect(payment = "Buy", property_type = "Apartment", sort_by = "Most Recent")
+print(AGENT.json(DATA))
