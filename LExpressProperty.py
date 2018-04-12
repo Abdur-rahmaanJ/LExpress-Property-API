@@ -2,11 +2,11 @@ import requests
 import json
 from bs4 import BeautifulSoup
 
-class Engine():
+class Agent():
 
-    def display(self, data):
-        print(json.dumps(data, indent = 4))
-        return None
+    def json(self, data):
+        json_data = json.dumps(data, indent = 4)
+        return json_data
 
     def collect(self, payment = None, property_type = None, sort_by = None, output = False, pages = 1):
 
@@ -117,6 +117,12 @@ class Engine():
         if sort_by is not None:
             if sort_by in ["least expenisve", "least-expensive", "Least Expensive", "Least-Expensive", "LEAST EXPENSIVE", "LEAST-EXPENSIVE"]:
                 __sort_by__ = "/?sort=price&l=15"
+            elif sort_by in ["most expensive", "most-expensive", "Most Expensive", "Most-Expensive", "MOST EXPENSIVE", "MOST-EXPENSVIE"]:
+                __sort_by__ = "?sort=-price&l=15"
+            elif sort_by in ["most recent", "most-recent", "Most Recent", "Most-Recent", "MOST RECENT", "MOST-RECENT"]:
+                __sort_by__ = "?sort=-created_at&l=15"
+            elif sort_by in ["least recent", "least-recent", "Least Recent", "Least-Recent", "LEAST RECENT", "LEAST-RECENT"]:
+                __sort_by__ = "?sort=created_at&l=15"
             else:
                 __sort_by__ = ""
                 valid_request = False
@@ -191,15 +197,17 @@ class Engine():
                     except:
                         __description__ = None
 
-                    """try:
+                    # Features of the property are found.
+                    feature_list = []
+                    try:
                         features = html.find("ul", {"class": "option-list"})
-                        print(features)
-                        print(features.li.get_text().strip())
+                        for feature in (features.find_all("li")):
+                            feature_list.append(feature.get_text().strip())
                     except:
-                        pass"""
+                        pass
 
                     # The details of the property are added to the property_list.
-                    details = {"Title" : __title__, "Price" : __price__, "Location" : __location__, "Description": __description__, "URL": __link__}
+                    details = {"Title" : __title__, "Price" : __price__, "Location" : __location__, "Description": __description__, "URL": __link__, "Features": feature_list}
                     properties_list.append(details)
 
         # Console output.
