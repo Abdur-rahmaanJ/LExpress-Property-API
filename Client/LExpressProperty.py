@@ -217,3 +217,5 @@ class Agent():
 
         # Retruning list is returned.
         return properties_list
+
+    
