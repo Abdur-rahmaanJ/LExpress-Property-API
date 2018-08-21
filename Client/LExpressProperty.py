@@ -33,11 +33,11 @@ class Agent():
             # Parameter: payment.
             if payment is not None:
                 if property_type is None:
-                    if payment in ["buy", "Buy", "BUY"]:
+                    if payment.lower() == "buy":
                         __payment__ = "/buy-mauritius/all"
-                    elif payment in ["rent", "Rent", "RENT"]:
+                    elif payment.lower() == "rent":
                         __payment__ = "/rent-mauritius/all"
-                    elif payment in ["holiday", "Holiday", "HOLIDAY"]:
+                    elif payment.lower() == "holiday":
                         __payment__ = "/holidays-mauritius/all"
                     else:
                         __payment__ = ""
@@ -47,11 +47,11 @@ class Agent():
                         if output is True:
                             print("[Invalid parameter: payment]")
                 else:
-                    if payment in ["buy", "Buy", "BUY"]:
+                    if payment.lower() == "buy":
                         __payment__ = "/buy-mauritius"
-                    elif payment in ["rent", "Rent", "RENT"]:
+                    elif payment.lower() == "rent":
                         __payment__ = "/rent-mauritius"
-                    elif payment in ["holiday", "Holiday", "HOLIDAY", "holidays", "Holidays", "HOLIDAYS"]:
+                    elif payment.lower() in 'holidays':
                         __payment__ = "/holidays-mauritius"
                     else:
                         __payment__ = ""
@@ -63,34 +63,34 @@ class Agent():
 
             # Parmeter: property_type.
             if property_type is not None:
-                if payment in ["buy", "Buy", "BUY"]:
-                    if property_type in ["house", "House", "HOUSE", "villa", "Villa", "VILLA"]:
+                if payment.lower() == "buy":
+                    if property_type.lower() == "house" or property_type.lower() == "villa":
                         __property_type__ = "/villa"
-                    elif property_type in ["townhouse", "Townhouse", "TOWNHOUSE"]:
+                    elif property_type.lower() == "townhouse":
                         __property_type__ = "/townhouse"
-                    elif property_type in ["apartment", "Apartment", "APARTMENT", "apartments", "Apartments", "APARTMENTS"]:
+                    elif property_type.lower() in "apartments":
                         __property_type__ = "/apartment"
-                    elif property_type in ["penthouse", "Penthouse", "PENTHOUSE"]:
+                    elif property_type.lower() == "penthouse":
                         __property_type__ = "/penthouse"
-                    elif property_type in ["residential complex", "residential-complex", "Residential Complex", "Residential-Complex", "RESIDENTIAL COMPLEX", "RESIDENTIAL-COMPLEX"]:
+                    elif property_type.lower() in ["residential complex", "residential-complex"]:
                         __property_type__ = "/residential_complex"
-                    elif property_type in ["residential land", "residential-land", "Residential Land", "Residential-Land", "RESIDENTIAL LAND", "RESIDENTIAL-LAND"]:
+                    elif property_type.lower() in ["residential land", "residential-land"]:
                         __property_type__ = "residential_land"
-                    elif property_type in ["agricultural land", "agricultural-land", "Agricultural Land", "Agricultural-Land", "AGRICULTURAL LAND", "AGRICULTURAL-LAND"]:
+                    elif property_type.lower() in ["agricultural land", "agricultural-land"]:
                         __property_type__ = "/agricultural_land"
-                    elif property_type in ["commercial land", "commercial-land", "Commercial Land", "Commercial-Land", "COMMERCIAL LAND", "COMMERCIAL-LAND"]:
+                    elif property_type.lower() in ["commercial land", "commercial-land"]:
                         __property_type__ = "/commercial_land"
-                    elif property_type in ["office", "Office", "OFFICE", "offices", "Offices", "OFFICES"]:
+                    elif property_type.lower() in "offices":
                         __property_type__ = "/offices"
-                    elif property_type in ["commercial space", "commerical-land", "Commercial Space", "Commercial-Space", "COMMERCIAL LAND", "COMMERCIAL-LAND"]:
+                    elif property_type.lower() in ["commercial space", "commerical-land"]:
                         __property_type__ = "/commercial_space"
-                    elif property_type in ["building", "Buildling", "BUILDING"]:
+                    elif property_type.lower() in ["building"]:
                         __property_type__ = "/warehouse"
-                    elif property_type in ["warehouse", "Warehouse", "WAREHOUSE"]:
+                    elif property_type.lower() in ["warehouse"]:
                         __property_type__ = "/warehouse"
-                    elif property_type in ["hotel resort", "hotel-resort", "Hotel Resort", "Hotel-Resort", "HOTEL RESORT", "HOTEL-RESORT"]:
+                    elif property_type.lower() in ["hotel resort", "hotel-resort"]:
                         __property_type__ = "/hotel_resort"
-                    elif property_type in ["stock-in-trade", "Stock-in-trade"]:
+                    elif property_type.lower() in ["stock-in-trade"]:
                         __property_type__ = "/stock_in_trade"
                     else:
                         __property_type__ = ""
@@ -100,30 +100,30 @@ class Agent():
                         if output is True:
                             print("[Invalid parameter: property_type]")
 
-                if payment in ["rent", "Rent", "RENT"]:
-                    if property_type in ["house", "House", "HOUSE", "villa", "Villa", "VILLA"]:
+                if payment.lower() in ["rent", "Rent", "RENT"]:
+                    if property_type.lower() in ["house", "villa"]:
                         __property_type__ = "/villa"
-                    elif property_type in ["townhouse", "Townhouse", "TOWNHOUSE"]:
+                    elif property_type.lower() in ["townhouse"]:
                         __property_type__ = "/townhouse"
-                    elif property_type in ["apartment", "Apartment", "APARTMENT", "apartments", "Apartments", "APARTMENTS"]:
+                    elif property_type.lower() in ["apartment"]:
                         __property_type__ = "/apartment"
-                    elif property_type in ["penthouse", "Penthouse", "PENTHOUSE"]:
+                    elif property_type.lower() in ["penthouse"]:
                         __property_type__ = "/penthouse"
-                    elif property_type in ["residential complex", "residential-complex", "Residential Complex", "Residential-Complex", "RESIDENTIAL COMPLEX", "RESIDENTIAL-COMPLEX"]:
+                    elif property_type.lower() in ["residential complex", "residential-complex"]:
                         __property_type__ = "/residential_complex"
-                    elif property_type in ["office", "Office", "OFFICE", "offices", "Offices", "OFFICES"]:
+                    elif property_type.lower() in ["office"]:
                         __property_type__ = "/offices"
-                    elif property_type in ["commercial space", "commerical-land", "Commercial Space", "Commercial-Space", "COMMERCIAL LAND", "COMMERCIAL-LAND"]:
+                    elif property_type.lower() in ["commercial space", "commerical-land"]:
                         __property_type__ = "/commercial_space"
-                    elif property_type in ["building", "Buildling", "BUILDING"]:
+                    elif property_type.lower() in ["building"]:
                         __property_type__ = "/building"
-                    elif property_type in ["warehouse", "Warehouse", "WAREHOUSE"]:
+                    elif property_type.lower() in ["warehouse"]:
                         __property_type__ = "/warehouse"
-                    elif property_type in ["hotel resort", "hotel-resort", "Hotel Resort", "Hotel-Resort", "HOTEL RESORT", "HOTEL-RESORT"]:
+                    elif property_type.lower() in ["hotel resort", "hotel-resort"]:
                         __property_type__ = "/hotel_resort"
-                    elif property_type in ["stock-in-trade", "Stock-in-trade"]:
+                    elif property_type.lower() in ["stock-in-trade"]:
                         __property_type__ = "/stock_in_trade"
-                    elif property_type in ["room", "Room", "ROOM"]:
+                    elif property_type.lower() in ["room"]:
                         __property_type__ = "/room"
                     else:
                         __property_type__ = ""
@@ -133,20 +133,20 @@ class Agent():
                         if output is True:
                             print("[Invalid parameter: property_type]")
 
-                if payment in ["holiday", "Holiday", "HOLIDAY", "holidays", "Holidays", "HOLIDAYS"]:
-                    if property_type in ["house", "House", "HOUSE", "villa", "Villa", "VILLA"]:
+                if payment.lower() in ["holiday"]:
+                    if property_type.lower() in ["house"]:
                         __property_type__ = "/villa"
-                    elif property_type in ["townhouse", "Townhouse", "TOWNHOUSE"]:
+                    elif property_type.lower() in ["townhouse"]:
                         __property_type__ = "/townhouse"
-                    elif property_type in ["apartment", "Apartment", "APARTMENT", "apartments", "Apartments", "APARTMENTS"]:
+                    elif property_type.lower() in ["apartment"]:
                         __property_type__ = "/apartment"
-                    elif property_type in ["penthouse", "Penthouse", "PENTHOUSE"]:
+                    elif property_type.lower() in ["penthouse"]:
                         __property_type__ = "/penthouse"
-                    elif property_type in ["residential complex", "residential-complex", "Residential Complex", "Residential-Complex", "RESIDENTIAL COMPLEX", "RESIDENTIAL-COMPLEX"]:
+                    elif property_type.lower() in ["residential complex", "residential-complex"]:
                         __property_type__ = "/residential_complex"
-                    elif property_type in ["guesthouse", "Guesthouse", "GUESTHOUSE"]:
+                    elif property_type.lower() in ["guesthouse"]:
                         __property_type__ = "/guesthouse"
-                    elif property_type in ["bungalow", "Bungalow", "BUNGALOW"]:
+                    elif property_type.lower() in ["bungalow"]:
                         __property_type__ = "/bungalow"
                     else:
                         __property_type__ = ""
@@ -158,13 +158,13 @@ class Agent():
 
             # Parameter: sort_by.
             if sort_by is not None:
-                if sort_by in ["least expenisve", "least-expensive", "Least Expensive", "Least-Expensive", "LEAST EXPENSIVE", "LEAST-EXPENSIVE"]:
+                if sort_by.lower() in ["least expenisve", "least-expensive"]:
                     __sort_by__ = "/?sort=price&l=15"
-                elif sort_by in ["most expensive", "most-expensive", "Most Expensive", "Most-Expensive", "MOST EXPENSIVE", "MOST-EXPENSVIE"]:
+                elif sort_by.lower() in ["most expensive", "most-expensive"]:
                     __sort_by__ = "?sort=-price&l=15"
-                elif sort_by in ["most recent", "most-recent", "Most Recent", "Most-Recent", "MOST RECENT", "MOST-RECENT"]:
+                elif sort_by.lower() in ["most recent", "most-recent"]:
                     __sort_by__ = "?sort=-created_at&l=15"
-                elif sort_by in ["least recent", "least-recent", "Least Recent", "Least-Recent", "LEAST RECENT", "LEAST-RECENT"]:
+                elif sort_by.lower() in ["least recent", "least-recent"]:
                     __sort_by__ = "?sort=created_at&l=15"
                 else:
                     __sort_by__ = ""
