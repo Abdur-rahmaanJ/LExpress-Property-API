@@ -10,4 +10,4 @@ install:
   - pip install bs4
 
 script:
-  - python Client/LExpressProperty.py
+  - python test_LExpressProperty.py
