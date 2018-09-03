@@ -6,175 +6,46 @@ class Agent():
 
     __requests_list__ = []
 
-    def json(self, data):
-        json_data = json.dumps(data, indent = 4)
-        return json_data
+    def check_connection(self):
+        """The internet connection to https://www.lexpressproperty.com/en/ is checked.
+           Returns True if connection is successful, returns False if connection is unsuccessful."""
+
+        try:
+            server = requests.get("https://www.lexpressproperty.com/en/")
+            return True
+        except:
+            return False
+
+    def process_request(self, payment, property_type, sort_by):
+
+        request_spec = {
+                        "buy": {"house": {"most expensive": "HelloWorld"} "code": "B", "code": "A",
+                                "villa": {"most expensive": "HelloWorld"}},
+                        "rent": {},
+                        "holiday": {}
+                        }
+        
+        for payment_key in request_spec:
+            if payment == payment_key:
+                for property_key in request_spec[payment]:
+                    if property_type == property_key:
+                        for sort_by_key in request_spec[payment][property_type]:
+                            if sort_by == sort_by_key:
+                                print(request_spec[payment][property_type][sort_by])
+                        
+
+    def parse(self):
+        pass
 
     def collect(self, payment = None, property_type = None, sort_by = "Least Expensive", output = False, pages = 1):
 
-        # Internet connection is checked.
-        connection_safe = False
-        try:
-            server = requests.get("https://www.lexpressproperty.com/en/")
-            connection_safe = True
-            # Console output.
-            if output is True:
-                print("[Connection established]")
-        except:
-            # Console output.
-            if output is True:
-                print("[Connection Failure]")
+        if self.check_connection() is True:
 
-        if connection_safe is True:
+            self.process_request(payment, property_type, sort_by)
 
-            # This variable will remain True if all parameters are valid.
-            valid_request = True 
+            return None
 
-            # Parameter: payment.
-            if payment is not None:
-                if property_type is None:
-                    if payment.lower() == "buy":
-                        __payment__ = "/buy-mauritius/all"
-                    elif payment.lower() == "rent":
-                        __payment__ = "/rent-mauritius/all"
-                    elif payment.lower() == "holiday":
-                        __payment__ = "/holidays-mauritius/all"
-                    else:
-                        __payment__ = ""
-                        valid_request = False
-
-                        # Console output.
-                        if output is True:
-                            print("[Invalid parameter: payment]")
-                else:
-                    if payment.lower() == "buy":
-                        __payment__ = "/buy-mauritius"
-                    elif payment.lower() == "rent":
-                        __payment__ = "/rent-mauritius"
-                    elif payment.lower() in 'holidays':
-                        __payment__ = "/holidays-mauritius"
-                    else:
-                        __payment__ = ""
-                        valid_request = False
-
-                        # Console output.
-                        if output is True:
-                            print("[Invalid parameter: payment]")
-
-            # Parmeter: property_type.
-            if property_type is not None:
-                if payment.lower() == "buy":
-                    if property_type.lower() == "house" or property_type.lower() == "villa":
-                        __property_type__ = "/villa"
-                    elif property_type.lower() == "townhouse":
-                        __property_type__ = "/townhouse"
-                    elif property_type.lower() in "apartments":
-                        __property_type__ = "/apartment"
-                    elif property_type.lower() == "penthouse":
-                        __property_type__ = "/penthouse"
-                    elif property_type.lower() in ["residential complex", "residential-complex"]:
-                        __property_type__ = "/residential_complex"
-                    elif property_type.lower() in ["residential land", "residential-land"]:
-                        __property_type__ = "residential_land"
-                    elif property_type.lower() in ["agricultural land", "agricultural-land"]:
-                        __property_type__ = "/agricultural_land"
-                    elif property_type.lower() in ["commercial land", "commercial-land"]:
-                        __property_type__ = "/commercial_land"
-                    elif property_type.lower() in "offices":
-                        __property_type__ = "/offices"
-                    elif property_type.lower() in ["commercial space", "commerical-land"]:
-                        __property_type__ = "/commercial_space"
-                    elif property_type.lower() in ["building"]:
-                        __property_type__ = "/warehouse"
-                    elif property_type.lower() in ["warehouse"]:
-                        __property_type__ = "/warehouse"
-                    elif property_type.lower() in ["hotel resort", "hotel-resort"]:
-                        __property_type__ = "/hotel_resort"
-                    elif property_type.lower() in ["stock-in-trade"]:
-                        __property_type__ = "/stock_in_trade"
-                    else:
-                        __property_type__ = ""
-                        valid_request = False
-
-                        # Console output.
-                        if output is True:
-                            print("[Invalid parameter: property_type]")
-
-                if payment.lower() in ["rent", "Rent", "RENT"]:
-                    if property_type.lower() in ["house", "villa"]:
-                        __property_type__ = "/villa"
-                    elif property_type.lower() in ["townhouse"]:
-                        __property_type__ = "/townhouse"
-                    elif property_type.lower() in ["apartment"]:
-                        __property_type__ = "/apartment"
-                    elif property_type.lower() in ["penthouse"]:
-                        __property_type__ = "/penthouse"
-                    elif property_type.lower() in ["residential complex", "residential-complex"]:
-                        __property_type__ = "/residential_complex"
-                    elif property_type.lower() in ["office"]:
-                        __property_type__ = "/offices"
-                    elif property_type.lower() in ["commercial space", "commerical-land"]:
-                        __property_type__ = "/commercial_space"
-                    elif property_type.lower() in ["building"]:
-                        __property_type__ = "/building"
-                    elif property_type.lower() in ["warehouse"]:
-                        __property_type__ = "/warehouse"
-                    elif property_type.lower() in ["hotel resort", "hotel-resort"]:
-                        __property_type__ = "/hotel_resort"
-                    elif property_type.lower() in ["stock-in-trade"]:
-                        __property_type__ = "/stock_in_trade"
-                    elif property_type.lower() in ["room"]:
-                        __property_type__ = "/room"
-                    else:
-                        __property_type__ = ""
-                        valid_request = False
-
-                        # Console output.
-                        if output is True:
-                            print("[Invalid parameter: property_type]")
-
-                if payment.lower() in ["holiday"]:
-                    if property_type.lower() in ["house"]:
-                        __property_type__ = "/villa"
-                    elif property_type.lower() in ["townhouse"]:
-                        __property_type__ = "/townhouse"
-                    elif property_type.lower() in ["apartment"]:
-                        __property_type__ = "/apartment"
-                    elif property_type.lower() in ["penthouse"]:
-                        __property_type__ = "/penthouse"
-                    elif property_type.lower() in ["residential complex", "residential-complex"]:
-                        __property_type__ = "/residential_complex"
-                    elif property_type.lower() in ["guesthouse"]:
-                        __property_type__ = "/guesthouse"
-                    elif property_type.lower() in ["bungalow"]:
-                        __property_type__ = "/bungalow"
-                    else:
-                        __property_type__ = ""
-                        valid_request = False
-
-                        # Console output.
-                        if output is True:
-                            print("[Invalid parameter: property_type]")
-
-            # Parameter: sort_by.
-            if sort_by is not None:
-                if sort_by.lower() in ["least expenisve", "least-expensive"]:
-                    __sort_by__ = "/?sort=price&l=15"
-                elif sort_by.lower() in ["most expensive", "most-expensive"]:
-                    __sort_by__ = "?sort=-price&l=15"
-                elif sort_by.lower() in ["most recent", "most-recent"]:
-                    __sort_by__ = "?sort=-created_at&l=15"
-                elif sort_by.lower() in ["least recent", "least-recent"]:
-                    __sort_by__ = "?sort=created_at&l=15"
-                else:
-                    __sort_by__ = ""
-                    valid_request = False
-
-                    # Console output.
-                    if output is True:
-                        print("[Invalid parameter: sort_by]")
-
-            # Empty list of properties is created.
+            """# Empty list of properties is created.
             properties_list = []
 
             # Different URL's are generated by the Engine for the different pages of data.
@@ -265,4 +136,4 @@ class Agent():
         # Console output.
         if output is True:
             print("[Termination]")
-            print("")
+            print("")"""
