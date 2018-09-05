@@ -25,8 +25,10 @@ class Agent():
         request_spec = {
                         "buy": {"house": {"most expensive": "?sort=-price&l=15", "url_segment": "/villa"},
                                 "url_segment": "/buy-mauritius"},
-                        "rent": {},
-                        "holiday": {}
+                        "rent": {"house": {"most expensive": "?sort=-price&l=15", "url_segment": "/villa"},
+                                "url_segment": "/rent-mauritius/all"},
+                        "holiday": {"house": {"most expensive": "?sort=-price&l=15", "url_segment": "/villa"},
+                                "url_segment": "/holidays-mauritius/all"}
                         }
 
         for payment_key in request_spec:
