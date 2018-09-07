@@ -1,3 +1,4 @@
+import Errors
 import requests
 from bs4 import BeautifulSoup
 
@@ -16,14 +17,14 @@ class Agent():
         except:
             return False
 
-    def process_request(self, payment, property_type, sort_by):
+    def create_request(self, payment, property_type, sort_by):
         """A URL request is created based on the parameters payment, property_type and sort_by using
            the request_spec dictionary which translates the given parameters into a valid url request.
            Request_spec is continiously looped over until the correct key and appropriate url_segment
            are found."""
 
         request_spec = {
-                        "buy": {"house": {"most expensive": "?sort=-price&l=15", "url_segment": "/villa"},
+                        "buy": {"house": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/villa"},
                                 "url_segment": "/buy-mauritius"},
                         "rent": {"house": {"most expensive": "?sort=-price&l=15", "url_segment": "/villa"},
                                 "url_segment": "/rent-mauritius/all"},
@@ -47,6 +48,16 @@ class Agent():
 
         return url_request
 
+    def extract_html(self, url_request, page_number):
+        """Pulls all the relevent HTML from the given L'Express Property page."""
+
+        page_request = url_request + page_number
+        self.requests_list.append(page_request)
+        server_response = requests.get(page_request).text
+        soup = BeautifulSoup(server_response, "html.parser")
+        html = soup.find_all("div", {"class": "text-box"})
+        return html
+
     def parse(self, url_request, pages):
         """Parses the HTML returned from the given url_request, attempts to find real estate references
            and their specifics."""
@@ -59,16 +70,10 @@ class Agent():
         for iteration in range(1, (pages+1)):
 
             """Page number is generated."""
-            __page_number__ = "&p=" + str(iteration)
-
-            """URL request is created, sent and soup is created."""
-            page_request = url_request + __page_number__
-            self.requests_list.append(page_request)
-            server_response = requests.get(page_request).text
-            soup = BeautifulSoup(server_response, "html.parser")
+            page_number = "&p=" + str(iteration)
 
             """The soup is parsed for relevent data."""
-            for html in soup.find_all("div", {"class": "text-box"}):
+            for html in self.extract_html(url_request, page_number):
 
                 property_list = []
                 
@@ -111,16 +116,16 @@ class Agent():
 
         return properties_list
 
-    def collect(self, payment = None, property_type = None, sort_by = "least expensive", pages = 1):
+    def get(self, payment = None, property_type = None, sort_by = "least expensive", pages = 1):
         """Collects and returns a list of real estate references in Mauritius based on the given parameters
            payment, property_type, sort_by and pages."""
 
         if self.check_connection() is True:
-            url_request = self.process_request(payment, property_type, sort_by)
+            url_request = self.create_request(payment, property_type, sort_by)
             if url_request is not None:
                 results = self.parse(url_request, pages)
                 return results
             else:
-                return None
+                raise Errors.IncorrectParameters("Please check your arguments for Agent.get()")
         else:
-            return None
+            raise Errors.ConnectionError("Please check your internet connection.")
