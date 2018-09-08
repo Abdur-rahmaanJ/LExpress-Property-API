@@ -24,11 +24,42 @@ class Agent():
 
         request_spec = {
                         "buy": {"house": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/villa"},
+                                "townhouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/townhouse"},
+                                "apartment": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/apartment"},
+                                "penthouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/penthouse"},
+                                "residential complex": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/residential_complex"},
+                                "residential land": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/residential_land"},
+                                "agricultural land": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/agricultural_land"},
+                                "commercial land": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/commercial_land"},
+                                "office": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/offices"},
+                                "commercial space": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/commercial_space"},
+                                "warehouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/warehouse"},
+                                "hotel_resort": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/hotel_resort"},
+                                "stock-in-trade": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/stock_in_trade"},
                                 "url_segment": "/buy-mauritius"},
+
                         "rent": {"house": {"most expensive": "?sort=-price&l=15", "url_segment": "/villa"},
-                                "url_segment": "/rent-mauritius/all"},
+                                 "townhouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/townhouse"},
+                                 "apartment": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/apartment"},
+                                 "penthouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/penthouse"},
+                                 "residential complex": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/residential_complex"},
+                                 "office": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/offices"},
+                                 "commercial space": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/commercial_space"},
+                                 "warehouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/warehouse"},
+                                 "building": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/building"},
+                                 "hotel_resort": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/hotel_resort"},
+                                 "stock-in-trade": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/stock_in_trade"},
+                                 "room": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/room"},
+                                 "url_segment": "/rent-mauritius/all"},
+
                         "holiday": {"house": {"most expensive": "?sort=-price&l=15", "url_segment": "/villa"},
-                                "url_segment": "/holidays-mauritius/all"}
+                                    "townhouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/townhouse"},
+                                    "apartment": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/apartment"},
+                                    "penthouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/penthouse"},
+                                    "residential complex": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/residential_complex"},
+                                    "guesthouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/guesthouse"},
+                                    "bungalow": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/bungalow"},
+                                    "url_segment": "/holidays-mauritius/all"}
                         }
 
         __payment__ = None
