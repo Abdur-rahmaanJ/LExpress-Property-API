@@ -1,268 +1,181 @@
-import requests
-import json
 from bs4 import BeautifulSoup
+import requests
 
 class Agent():
+    """The main class of the LExpressProperty API."""
 
-    __requests_list__ = []
+    requests_list = []
 
-    def json(self, data):
-        json_data = json.dumps(data, indent = 4)
-        return json_data
+    def check_connection(self):
+        """The internet connection to https://www.lexpressproperty.com/en/ is checked.
+           Returns True if connection is successful, returns False if connection is unsuccessful."""
 
-    def collect(self, payment = None, property_type = None, sort_by = "Least Expensive", output = False, pages = 1):
-
-        # Internet connection is checked.
-        connection_safe = False
         try:
             server = requests.get("https://www.lexpressproperty.com/en/")
-            connection_safe = True
-            # Console output.
-            if output is True:
-                print("[Connection established]")
+            return True
         except:
-            # Console output.
-            if output is True:
-                print("[Connection Failure]")
+            return False
 
-        if connection_safe is True:
+    def create_request(self, payment, property_type, sort_by):
+        """A URL request is created based on the parameters payment, property_type and sort_by using
+           the request_spec dictionary which translates the given parameters into a valid url request.
+           Request_spec is continiously looped over until the correct key and appropriate url_segment
+           are found."""
 
-            # This variable will remain True if all parameters are valid.
-            valid_request = True 
+        request_spec = {
+                        "buy": {"house": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/villa"},
+                                "townhouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/townhouse"},
+                                "apartment": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/apartment"},
+                                "penthouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/penthouse"},
+                                "residential complex": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/residential_complex"},
+                                "residential land": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/residential_land"},
+                                "agricultural land": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/agricultural_land"},
+                                "commercial land": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/commercial_land"},
+                                "office": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/offices"},
+                                "commercial space": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/commercial_space"},
+                                "warehouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/warehouse"},
+                                "hotel_resort": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/hotel_resort"},
+                                "stock-in-trade": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/stock_in_trade"},
+                                "url_segment": "/buy-mauritius"},
 
-            # Parameter: payment.
-            if payment is not None:
-                if property_type is None:
-                    if payment.lower() == "buy":
-                        __payment__ = "/buy-mauritius/all"
-                    elif payment.lower() == "rent":
-                        __payment__ = "/rent-mauritius/all"
-                    elif payment.lower() == "holiday":
-                        __payment__ = "/holidays-mauritius/all"
-                    else:
-                        __payment__ = ""
-                        valid_request = False
+                        "rent": {"house": {"most expensive": "?sort=-price&l=15", "url_segment": "/villa"},
+                                 "townhouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/townhouse"},
+                                 "apartment": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/apartment"},
+                                 "penthouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/penthouse"},
+                                 "residential complex": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/residential_complex"},
+                                 "office": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/offices"},
+                                 "commercial space": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/commercial_space"},
+                                 "warehouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/warehouse"},
+                                 "building": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/building"},
+                                 "hotel_resort": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/hotel_resort"},
+                                 "stock-in-trade": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/stock_in_trade"},
+                                 "room": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/room"},
+                                 "url_segment": "/rent-mauritius/all"},
 
-                        # Console output.
-                        if output is True:
-                            print("[Invalid parameter: payment]")
-                else:
-                    if payment.lower() == "buy":
-                        __payment__ = "/buy-mauritius"
-                    elif payment.lower() == "rent":
-                        __payment__ = "/rent-mauritius"
-                    elif payment.lower() in 'holidays':
-                        __payment__ = "/holidays-mauritius"
-                    else:
-                        __payment__ = ""
-                        valid_request = False
+                        "holiday": {"house": {"most expensive": "?sort=-price&l=15", "url_segment": "/villa"},
+                                    "townhouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/townhouse"},
+                                    "apartment": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/apartment"},
+                                    "penthouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/penthouse"},
+                                    "residential complex": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/residential_complex"},
+                                    "guesthouse": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/guesthouse"},
+                                    "bungalow": {"most expensive": "?sort=-price&l=15", "least expensive": "/?sort=price&l=15", "most recent": "?sort=-created_at&l=15", "least recent": "?sort=created_at&l=15", "url_segment": "/bungalow"},
+                                    "url_segment": "/holidays-mauritius/all"}
+                        }
 
-                        # Console output.
-                        if output is True:
-                            print("[Invalid parameter: payment]")
+        __payment__ = None
+        __property_type__ = None
+        __sort_by__ = None
 
-            # Parmeter: property_type.
-            if property_type is not None:
-                if payment.lower() == "buy":
-                    if property_type.lower() == "house" or property_type.lower() == "villa":
-                        __property_type__ = "/villa"
-                    elif property_type.lower() == "townhouse":
-                        __property_type__ = "/townhouse"
-                    elif property_type.lower() in "apartments":
-                        __property_type__ = "/apartment"
-                    elif property_type.lower() == "penthouse":
-                        __property_type__ = "/penthouse"
-                    elif property_type.lower() in ["residential complex", "residential-complex"]:
-                        __property_type__ = "/residential_complex"
-                    elif property_type.lower() in ["residential land", "residential-land"]:
-                        __property_type__ = "residential_land"
-                    elif property_type.lower() in ["agricultural land", "agricultural-land"]:
-                        __property_type__ = "/agricultural_land"
-                    elif property_type.lower() in ["commercial land", "commercial-land"]:
-                        __property_type__ = "/commercial_land"
-                    elif property_type.lower() in "offices":
-                        __property_type__ = "/offices"
-                    elif property_type.lower() in ["commercial space", "commerical-land"]:
-                        __property_type__ = "/commercial_space"
-                    elif property_type.lower() in ["building"]:
-                        __property_type__ = "/warehouse"
-                    elif property_type.lower() in ["warehouse"]:
-                        __property_type__ = "/warehouse"
-                    elif property_type.lower() in ["hotel resort", "hotel-resort"]:
-                        __property_type__ = "/hotel_resort"
-                    elif property_type.lower() in ["stock-in-trade"]:
-                        __property_type__ = "/stock_in_trade"
-                    else:
-                        __property_type__ = ""
-                        valid_request = False
+        for payment_key in request_spec:
+            if payment == payment_key:
+                __payment__ = request_spec[payment]["url_segment"]
+                for property_key in request_spec[payment]:
+                    if property_type == property_key:
+                        __property_type__ = request_spec[payment][property_type]["url_segment"]
+                        for sort_by_key in request_spec[payment][property_type]:
+                            if sort_by == sort_by_key:
+                                __sort_by__ = request_spec[payment][property_type][sort_by]
 
-                        # Console output.
-                        if output is True:
-                            print("[Invalid parameter: property_type]")
-
-                if payment.lower() in ["rent", "Rent", "RENT"]:
-                    if property_type.lower() in ["house", "villa"]:
-                        __property_type__ = "/villa"
-                    elif property_type.lower() in ["townhouse"]:
-                        __property_type__ = "/townhouse"
-                    elif property_type.lower() in ["apartment"]:
-                        __property_type__ = "/apartment"
-                    elif property_type.lower() in ["penthouse"]:
-                        __property_type__ = "/penthouse"
-                    elif property_type.lower() in ["residential complex", "residential-complex"]:
-                        __property_type__ = "/residential_complex"
-                    elif property_type.lower() in ["office"]:
-                        __property_type__ = "/offices"
-                    elif property_type.lower() in ["commercial space", "commerical-land"]:
-                        __property_type__ = "/commercial_space"
-                    elif property_type.lower() in ["building"]:
-                        __property_type__ = "/building"
-                    elif property_type.lower() in ["warehouse"]:
-                        __property_type__ = "/warehouse"
-                    elif property_type.lower() in ["hotel resort", "hotel-resort"]:
-                        __property_type__ = "/hotel_resort"
-                    elif property_type.lower() in ["stock-in-trade"]:
-                        __property_type__ = "/stock_in_trade"
-                    elif property_type.lower() in ["room"]:
-                        __property_type__ = "/room"
-                    else:
-                        __property_type__ = ""
-                        valid_request = False
-
-                        # Console output.
-                        if output is True:
-                            print("[Invalid parameter: property_type]")
-
-                if payment.lower() in ["holiday"]:
-                    if property_type.lower() in ["house"]:
-                        __property_type__ = "/villa"
-                    elif property_type.lower() in ["townhouse"]:
-                        __property_type__ = "/townhouse"
-                    elif property_type.lower() in ["apartment"]:
-                        __property_type__ = "/apartment"
-                    elif property_type.lower() in ["penthouse"]:
-                        __property_type__ = "/penthouse"
-                    elif property_type.lower() in ["residential complex", "residential-complex"]:
-                        __property_type__ = "/residential_complex"
-                    elif property_type.lower() in ["guesthouse"]:
-                        __property_type__ = "/guesthouse"
-                    elif property_type.lower() in ["bungalow"]:
-                        __property_type__ = "/bungalow"
-                    else:
-                        __property_type__ = ""
-                        valid_request = False
-
-                        # Console output.
-                        if output is True:
-                            print("[Invalid parameter: property_type]")
-
-            # Parameter: sort_by.
-            if sort_by is not None:
-                if sort_by.lower() in ["least expenisve", "least-expensive"]:
-                    __sort_by__ = "/?sort=price&l=15"
-                elif sort_by.lower() in ["most expensive", "most-expensive"]:
-                    __sort_by__ = "?sort=-price&l=15"
-                elif sort_by.lower() in ["most recent", "most-recent"]:
-                    __sort_by__ = "?sort=-created_at&l=15"
-                elif sort_by.lower() in ["least recent", "least-recent"]:
-                    __sort_by__ = "?sort=created_at&l=15"
-                else:
-                    __sort_by__ = ""
-                    valid_request = False
-
-                    # Console output.
-                    if output is True:
-                        print("[Invalid parameter: sort_by]")
-
-            # Empty list of properties is created.
-            properties_list = []
-
-            # Different URL's are generated by the Engine for the different pages of data.
-            self.__requests_list__ = []
-            for iteration in range(1, (pages+1)):
-
-                # Page number is generated.
-                __page_number__ = "&p=" + str(iteration)
-
-                # URL request is created and sent.
-                if valid_request is True:
-                    url_request = ("https://www.lexpressproperty.com/en" + __payment__ + __property_type__ + __sort_by__ + __page_number__)
-                    self.__requests_list__.append(url_request)
-                    server_response = requests.get(url_request)
-
-                    # Console output.
-                    if output is True:
-                        print("[" + str(server_response) + ", " + url_request + "]")
-
-                    # Soup is created.
-                    server_response = server_response.text
-                    soup = BeautifulSoup(server_response, "html.parser")
-
-                    # The soup is parsed for relevent data.
-                    for html in soup.find_all("div", {"class": "text-box"}):
-
-                        # List for the details of property is created.
-                        property_list = []
-                        
-                        # Title is found.
-                        try:
-                            __title__ = html.h2.get_text().strip()
-                        # The Title will be set as None if it cannot be extracted.
-                        except:
-                            __title__ = None
-
-                        # The price is found.
-                        try:
-                            prices = html.find("strong", {"class": "price"})
-                            price_one = prices.a.get_text().strip()
-                            price_two = prices.em.get_text().strip()
-                            __price__ = price_one + " " + price_two
-                        # The price will be set as None if it cannot be extracted.
-                        except:
-                            __price__ = None
-
-                        # Link is found.
-                        try:
-                            __link__ = html.a["href"]
-                        # The link will be set as None if it cannot be extracted.
-                        except:
-                            __link__ = None
-
-                        # Location is found.
-                        try:
-                            __location__ = html.address.get_text().strip()
-                        # The location will be set as None if it cannot be extracted.
-                        except:
-                            __location__ = None
-
-                        # Description is found.
-                        try:
-                            __description__ = html.p.get_text().strip()
-                        # The description will be set as None if it cannot be extracted.
-                        except:
-                            __description__ = None
-
-                        # Features of the property are found.
-                        feature_list = []
-                        try:
-                            features = html.find("ul", {"class": "option-list"})
-                            for feature in (features.find_all("li")):
-                                feature_list.append(feature.get_text().strip())
-                        except:
-                            pass
-
-                        # The details of the property are added to the property_list.
-                        details = {"Title" : __title__, "Price" : __price__, "Location" : __location__, "Description": __description__, "URL": __link__, "Features": feature_list}
-                        properties_list.append(details)
-
-            # Retruning list is returned.
-            return properties_list
-    
+        if __payment__ is None or __property_type__ is None or __sort_by__ is None:
+            url_request = None
         else:
-            properties_list = []
-            return properties_list
+            url_request = "https://www.lexpressproperty.com/en" + __payment__ + __property_type__ + __sort_by__
+        return url_request
 
-        # Console output.
-        if output is True:
-            print("[Termination]")
-            print("")
+    def extract_html(self, url_request, page_number):
+        """Pulls all the relevent HTML from the given L'Express Property page."""
+
+        page_request = url_request + page_number
+        self.requests_list.append(page_request)
+        server_response = requests.get(page_request).text
+        soup = BeautifulSoup(server_response, "html.parser")
+        html = soup.find_all("div", {"class": "text-box"})
+        return html
+
+    def parse(self, url_request, pages):
+        """Parses the HTML returned from the given url_request, attempts to find real estate references
+           and their specifics."""
+
+        """Empty list of properties is created."""
+        properties_list = []
+
+        """Different URL's are generated by the Engine for the different pages of data."""
+        self.__requests_list__ = []
+        for iteration in range(1, (pages+1)):
+
+            """Page number is generated."""
+            page_number = "&p=" + str(iteration)
+
+            """The soup is parsed for relevent data."""
+            for html in self.extract_html(url_request, page_number):
+
+                property_list = []
+
+                try:
+                    __title__ = html.h2.get_text().strip()
+                except:
+                    __title__ = None
+
+                try:
+                    prices = html.find("strong", {"class": "price"})
+                    __price__ = prices.a.get_text().strip() + " " + prices.em.get_text().strip()
+                except:
+                    __price__ = None
+
+                try:
+                    __link__ = html.a["href"]
+                except:
+                    __link__ = None
+
+                try:
+                    __location__ = html.address.get_text().strip()
+                except:
+                    __location__ = None
+
+                try:
+                    __description__ = html.p.get_text().strip()
+                except:
+                    __description__ = None
+
+                feature_list = []
+                try:
+                    features = html.find("ul", {"class": "option-list"})
+                    for feature in (features.find_all("li")):
+                        feature_list.append(feature.get_text().strip())
+                except:
+                    pass
+
+                details = {"Title" : __title__, "Price" : __price__, "Location" : __location__, "Description": __description__, "URL": __link__, "Features": feature_list}
+                properties_list.append(details)
+
+        return properties_list
+
+    def get(self, payment = None, property_type = None, sort_by = "least expensive", pages = 1):
+        """Collects and returns a list of real estate references in Mauritius based on the given parameters
+           payment, property_type, sort_by and pages."""
+
+        if self.check_connection() is True:
+            url_request = self.create_request(payment, property_type, sort_by)
+            if url_request is not None:
+                results = self.parse(url_request, pages)
+                return results
+            else:
+                raise IncorrectParameters("Please check your arguments for Agent.get()")
+        else:
+            raise ConnectionError("Please check your internet connection.")
+
+class Error(Exception):
+    """Base class for exceptions in this module."""
+    pass
+
+class ConnectionError(Error):
+    """Error message for a connection failure."""
+
+    def __init__(self, message):
+        self.message = message
+
+class IncorrectParameters(Error):
+    """Error message for incorrect arguments for Agent.get()"""
+
+    def __init__(self, message):
+        self.message = message

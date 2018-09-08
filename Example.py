@@ -1,6 +1,5 @@
 from Client import LExpressProperty
 
 AGENT = LExpressProperty.Agent()
-DATA = AGENT.get(payment = "buy", property_type = "house", sort_by = "most expensive", pages = 5)
+DATA = AGENT.get(payment = "rent", property_type = "room", sort_by = "least expensive", pages = 1)
 print(DATA)
-
