@@ -1,6 +1,5 @@
-import Errors
-import requests
 from bs4 import BeautifulSoup
+import requests
 
 class Agent():
     """The main class of the LExpressProperty API."""
@@ -32,6 +31,10 @@ class Agent():
                                 "url_segment": "/holidays-mauritius/all"}
                         }
 
+        __payment__ = None
+        __property_type__ = None
+        __sort_by__ = None
+
         for payment_key in request_spec:
             if payment == payment_key:
                 __payment__ = request_spec[payment]["url_segment"]
@@ -41,11 +44,11 @@ class Agent():
                         for sort_by_key in request_spec[payment][property_type]:
                             if sort_by == sort_by_key:
                                 __sort_by__ = request_spec[payment][property_type][sort_by]
-        try:
-            url_request = "https://www.lexpressproperty.com/en" + __payment__ + __property_type__ + __sort_by__
-        except:
-            url_request = None
 
+        if __payment__ is None or __property_type__ is None or __sort_by__ is None:
+            url_request = None
+        else:
+            url_request = "https://www.lexpressproperty.com/en" + __payment__ + __property_type__ + __sort_by__
         return url_request
 
     def extract_html(self, url_request, page_number):
@@ -76,7 +79,7 @@ class Agent():
             for html in self.extract_html(url_request, page_number):
 
                 property_list = []
-                
+
                 try:
                     __title__ = html.h2.get_text().strip()
                 except:
@@ -126,6 +129,22 @@ class Agent():
                 results = self.parse(url_request, pages)
                 return results
             else:
-                raise Errors.IncorrectParameters("Please check your arguments for Agent.get()")
+                raise IncorrectParameters("Please check your arguments for Agent.get()")
         else:
-            raise Errors.ConnectionError("Please check your internet connection.")
+            raise ConnectionError("Please check your internet connection.")
+
+class Error(Exception):
+    """Base class for exceptions in this module."""
+    pass
+
+class ConnectionError(Error):
+    """Error message for a connection failure."""
+
+    def __init__(self, message):
+        self.message = message
+
+class IncorrectParameters(Error):
+    """Error message for incorrect arguments for Agent.get()"""
+
+    def __init__(self, message):
+        self.message = message
