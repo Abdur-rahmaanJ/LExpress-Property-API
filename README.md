@@ -2,7 +2,7 @@
 
 ![CocoaPods](https://img.shields.io/badge/Python-3.3%2C%203.4%2C%203.5%2C%203.6-brightgreen.svg)
 [![Build Status](https://travis-ci.org/xPrithvi/LExpress-Property-API.svg?branch=master)](https://travis-ci.org/xPrithvi/LExpress-Property-API)
-![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/xPrithvi/LExpress-Property-API/badges/quality-score.png?b=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/xPrithvi/LExpress-Property-API/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/xPrithvi/LExpress-Property-API/?branch=master)
 ![CocoaPods](https://img.shields.io/cocoapods/l/AFNetworking.svg)
 
 
