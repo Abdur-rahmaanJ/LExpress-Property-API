@@ -118,7 +118,7 @@ class Agent():
 
                 try:
                     prices = html.find("strong", {"class": "price"})
-                    __price__ = prices.a.get_text().strip() + " " + prices.em.get_text().strip()
+                    __price__ = "{} {}".format(prices.a.get_text().strip(), prices.em.get_text().strip())
                 except:
                     __price__ = None
 
